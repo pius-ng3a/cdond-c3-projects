@@ -1,4 +1,11 @@
 version: 2.1
+executors:
+  general-executor:
+    docker:
+      - image: circleci/ruby:2.4.1
+  lw_executor:
+    docker:
+      - image: circleci/node:13.8.0
 
 jobs:
   hello-world:
@@ -10,8 +17,35 @@ jobs:
           name: Say Hello
           command: |
             echo "Hello World"
+  build_frontend:
+    executor: lw_executor
+    steps:
+      - checkout
+      - restore_cache:
+        Keys: [frontend-build]
+      - run:
+          name: Lint Frontend
+          command:   #specify the instructions to be executed while in this section. This should be modify accordingly
+            cd frontend
+            npm install
+            npm run build
+            npm run test
+  build_backend:
+    executor: lw_executor
+    steps:
+      - checkout
+      - restore_cacher:
+      - run:
+          name: Backend build
+          command:
+            cd backend
+            npm install
+            npm run build
+            npm run test
 
 workflows:
   default:
     jobs:
       - hello-world
+      - build_frontend
+      - build_backend
