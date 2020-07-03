@@ -34,7 +34,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cacher:
       - run:
           name: Backend build
           command:
