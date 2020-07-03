@@ -1,0 +1,125 @@
+version: 2.1
+
+commands:
+  destroy-environment: #this is a command that takes two parameters and destroys an environment when something fails
+    description: Destroy frontend and backend cloudformation stacks given a workflow ID
+    parameters:
+      workflow_id:
+        type: string
+      event:
+        type: string
+    steps: 
+      - run: 
+          name: Destroy environment <<parameters.workflow_id>>
+          when: <<parameters.event>>
+          command:
+            echo " Destroying environment  << parameters.workflow_id >> "
+            aws s3 rm s3://udapeople-<< parameters.workflow_id >> --recursive
+            aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.workflow_id
+            aws cloudformation delete-stack --stack-name udapeople--frontend-<<parameters.workflow_id
+  rollback-migrations-on-fail:
+    description: Migrations rolled back if necessary
+    steps:
+      - restore_cache:
+         Keys: [backend-build]
+      - attach_workspace:
+          at: ~/project/backend
+          
+
+
+jobs:
+  lint-frontend:
+    environment: #define environment variables at this levels
+      CODE: 123
+    docker: #specify the built-in docker image you would want to use. Any docker image should work
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+        Keys: [frontend-build]
+      - run:
+          name: Lint Frontend
+          command:   #specify the instructions to be executed while in this section. This should be modify accordingly
+            cd frontend
+            echo $CODE
+            npm install
+            npm run build
+      - save_cache:
+        paths: [frontend/node_modules]
+        Key: frontend-build
+    build-backend:
+      docker:
+        - image: circleci/nodee:13.8.0
+      steps:
+        - checkout
+        - restore_cacher:
+          Keys: [backend-build]
+        - run:
+          name: Backend build
+          command:
+            cd backend
+            npm install
+            npm run build
+        - save_cache:
+          paths: [backend/node_modules]
+          Key: backend-build
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    branches:
+      only:
+        - master
+        - /rc-.*/
+    steps:
+      - checkout #Type which is simply an alias here called checkout
+      - run: yum -y install tar gzip
+      - run: 
+          name: Ensure backend infrastructure exists
+          command:
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+      - run:  #run command allows for the execution of the available instructions
+          name: Ensure frontend infrastructure exists
+          command:
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+      - run:  #run command allows for the execution of the available instructions
+          name: Add backend ip to ansible inventory
+          command:
+            aws ec2 describe instances \
+              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress " \
+              --output text >> .circleci/ansible/inventory.txt
+      - persist_to_workspace: # allows one to send a certain file or folder to a shared area
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+          event: on_fail
+
+
+
+
+
+  hello-world:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Say Hello
+          command: |
+            echo "Hello World"
+  
+
+workflows:
+  default:
+    jobs:
+      - hello-world
