@@ -42,7 +42,7 @@ jobs:
             npm run build
             npm run test
 
-workflows:
+workflows: #workflows specify jobs to run
   default:
     jobs:
       - hello-world
