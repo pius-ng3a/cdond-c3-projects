@@ -21,8 +21,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cache:
-        Keys: [frontend-build]
       - run:
           name: Lint Frontend
           command:   #specify the instructions to be executed while in this section. This should be modify accordingly
