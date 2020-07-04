@@ -48,8 +48,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cache:
-          Keys: [frontend-build]
       - run: 
           name: test front end
           command: |
@@ -82,8 +80,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cache:
-          Keys: [backend-build]
       - run: 
           name: test front end
           command: |
