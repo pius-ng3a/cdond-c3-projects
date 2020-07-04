@@ -48,7 +48,7 @@ jobs:
           name: test front end
           command: |
             cd frontend
-            #npm install
+            npm install
             npm run test
       #- run:
       #    name: Save test results
@@ -81,17 +81,18 @@ jobs:
             cd backend
             npm install
             npm run test
+      - run: mkdir ~/junit
+      - run: npm install -g mocha-junit-reporter
       - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/cucumber
-            bundle exec cucumber --format junit --out ~/cucumber/junit.xml
+          environment:
+            MOCHA_FILE: ~/junit/test-results.xml
+          command: mocha test --reporter mocha-junit-reporter
           when: always
       - store_test_results:
-          path: ~/cucumber
+          path: ~/junit
       - store_artifacts:
-          path: ~/cucumber
-        
+          path: ~/junit    
+  
 
 workflows: #workflows specify jobs to run
   default:
