@@ -48,8 +48,6 @@ jobs:
           name: test front end
           command: |
             cd frontend
-            npm install
-            npm audit fix
             npm run test
       - run:
           name: Save test results
@@ -71,8 +69,26 @@ jobs:
       #    path: ~/junit
       #- store_artifacts:
       #    path: ~/junit          
-
-            
+  test_backend:
+    executor: lw_executor
+    steps:
+      - checkout
+      - run: 
+          name: test front end
+          command: |
+            cd backend
+            npm run test
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/cucumber
+            bundle exec cucumber --format junit --out ~/cucumber/junit.xml
+          when: always
+      - store_test_results:
+          path: ~/cucumber
+      - store_artifacts:
+          path: ~/cucumber
+        
 
 workflows: #workflows specify jobs to run
   default:
@@ -81,3 +97,4 @@ workflows: #workflows specify jobs to run
       - build_frontend
       - build_backend
       - test_frontend
+      - test_backend
