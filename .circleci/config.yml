@@ -55,8 +55,8 @@ jobs:
             mkdir -p ~/cucumber
             bundle exec cucumber --format junit --out ~/cucumber/junit.xml
           when: always
-      - store_test_results:
-          path: ~/cucumber
+      #- store_test_results:
+      #    path: ~/cucumber
       - store_artifacts:
           path: ~/cucumber
       #- run: mkdir ~/junit
