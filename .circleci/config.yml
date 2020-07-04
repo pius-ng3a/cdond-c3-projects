@@ -49,26 +49,26 @@ jobs:
           command: |
             cd frontend
             npm run test
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/cucumber
-            bundle exec cucumber --format junit --out ~/cucumber/junit.xml
-          when: always
-      #- store_test_results:
-      #    path: ~/cucumber
-      - store_artifacts:
-          path: ~/cucumber
-      #- run: mkdir ~/junit
       #- run:
-      #    command: mocha test --reporter mocha-junit-reporter
-      #    environment:
-      #      MOCHA_FILE: ~/junit/test-results.xml
+      #    name: Save test results
+      #    command: |
+      #      mkdir -p ~/cucumber
+      #      bundle exec cucumber --format junit --out ~/cucumber/junit.xml
       #    when: always
       #- store_test_results:
-      #    path: ~/junit
+      #    path: ~/cucumber
       #- store_artifacts:
-      #    path: ~/junit          
+      #    path: ~/cucumber
+      - run: mkdir ~/junit
+      - run:
+          command: mocha test --reporter mocha-junit-reporter
+          environment:
+            MOCHA_FILE: ~/junit/test-results.xml
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit          
   test_backend:
     executor: lw_executor
     steps:
