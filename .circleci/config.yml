@@ -60,12 +60,12 @@ jobs:
       #    path: ~/cucumber
       #- store_artifacts:
       #    path: ~/cucumber
-      - run: mkdir ~/junit
+      - run: mkdir -p ~/junit
       - run: npm install -g mocha-junit-reporter
       - run:
           environment:
             MOCHA_FILE: ~/junit/test-results.xml
-          command: mocha test --reporter mocha-junit-reporter
+          command: npx mocha test --reporter mocha-junit-reporter
           when: always
       - store_test_results:
           path: ~/junit
@@ -81,7 +81,7 @@ jobs:
             cd backend
             npm install
             npm run test
-      - run: mkdir ~/junit
+      - run: mkdir -p ~/junit
       - run: npm install -g mocha-junit-reporter
       - run:
           environment:
