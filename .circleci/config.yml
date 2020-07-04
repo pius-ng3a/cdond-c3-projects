@@ -51,16 +51,26 @@ jobs:
             npm install
             npm audit fix
             npm run test
-      - run: mkdir ~/junit
       - run:
-          command: mocha test --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: ~/junit/test-results.xml
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit          
+        name: Save test results
+        command: |
+          mkdir -p ~/cucumber
+          bundle exec cucumber --format junit --out ~/cucumber/junit.xml
+        when: always
+    - store_test_results:
+        path: ~/cucumber
+    - store_artifacts:
+        path: ~/cucumber
+      #- run: mkdir ~/junit
+      #- run:
+      #    command: mocha test --reporter mocha-junit-reporter
+      #    environment:
+      #      MOCHA_FILE: ~/junit/test-results.xml
+      #    when: always
+      #- store_test_results:
+      #    path: ~/junit
+      #- store_artifacts:
+      #    path: ~/junit          
 
             
 
