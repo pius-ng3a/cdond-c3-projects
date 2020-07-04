@@ -26,8 +26,9 @@ jobs:
           command:  |  #specify the instructions to be executed while in this section. This should be modify accordingly
             cd frontend 
             npm install 
+            npm audit fix
             npm run build 
-            npm run test
+            
   build_backend:
     executor: lw_executor
     steps:
@@ -37,8 +38,9 @@ jobs:
           command: |
             cd backend
             npm install
+            npm audit fix
             npm run build
-            npm run test
+            
 
 workflows: #workflows specify jobs to run
   default:
