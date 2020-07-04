@@ -21,8 +21,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cache:
-          Keys: [frontend-build]
       - run:
           name: build Frontend
           command:  |  #specify the instructions to be executed while in this section. This should be modify accordingly
@@ -35,8 +33,6 @@ jobs:
     executor: lw_executor
     steps:
       - checkout
-      - restore_cache:
-          Keys: [backend-build]
       - run:
           name: Backend build
           command: |
