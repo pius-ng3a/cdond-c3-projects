@@ -23,10 +23,10 @@ jobs:
       - checkout
       - run:
           name: build Frontend
-          command:   #specify the instructions to be executed while in this section. This should be modify accordingly
-            cd frontend \
-            npm install \
-            npm run build \
+          command:  |  #specify the instructions to be executed while in this section. This should be modify accordingly
+            cd frontend 
+            npm install 
+            npm run build 
             npm run test
   build_backend:
     executor: lw_executor
@@ -34,7 +34,7 @@ jobs:
       - checkout
       - run:
           name: Backend build
-          command:
+          command: |
             cd backend
             npm install
             npm run build
