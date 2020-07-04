@@ -22,11 +22,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Lint Frontend
+          name: build Frontend
           command:   #specify the instructions to be executed while in this section. This should be modify accordingly
-            cd frontend
-            npm install
-            npm run build
+            cd frontend \
+            npm install \
+            npm run build \
             npm run test
   build_backend:
     executor: lw_executor
