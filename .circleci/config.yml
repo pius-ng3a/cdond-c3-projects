@@ -100,7 +100,7 @@ workflows: #workflows specify jobs to run
       - build_backend
       - test_frontend:
           requires:
-            -build_frontend
+            - build_frontend
       - test_backend:
           requires:
             - build_backend
