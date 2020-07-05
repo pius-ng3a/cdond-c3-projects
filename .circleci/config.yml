@@ -101,14 +101,14 @@ jobs:
           name: checking system vulnerabilities Frontend
           command: |
             cd frontend
-            npm install
+            #npm install
             npm audit --audit-level=critical
           when: on_fail
       - run:
           name: checking system vulnerabilities backend
           command: |
             cd backend
-            npm install
+            #npm install
             npm audit --audit-level=critical
           when: on_fail
 
