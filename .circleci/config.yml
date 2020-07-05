@@ -103,7 +103,7 @@ jobs:
             cd frontend
             npm install
             npm audit --audit-level=critical
-          when: on_fail
+          when: critical
       - run:
           name: checking system vulnerabilities backend
           command: |
