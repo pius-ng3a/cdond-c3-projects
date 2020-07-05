@@ -60,18 +60,19 @@ jobs:
       #    path: ~/cucumber
       #- store_artifacts:
       #    path: ~/cucumber
-      - run: mkdir -p ~/junit
-      - run:
-          environment:
-            MOCHA_FILE: ~/junit/test-results.xml
-          command: |
-            npm install -g mocha-junit-reporter
-            mocha test --reporter mocha-junit-reporter
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit          
+      ### THIS IS ANOTHER OPTION
+      #- run: mkdir -p ~/junit
+      #- run:
+      #    environment:
+      #      MOCHA_FILE: ~/junit/test-results.xml
+       #   command: |
+        #    npm install -g mocha-junit-reporter
+         #   mocha test --reporter mocha-junit-reporter
+          #when: always
+      #- store_test_results:
+       #   path: ~/junit
+      #- store_artifacts:
+      #    path: ~/junit          
   test_backend:
     executor: lw_executor
     steps:
@@ -82,17 +83,17 @@ jobs:
             cd backend
             npm install
             npm run test
-      - run: mkdir -p ~/junit
-      - run: npm install -g mocha-junit-reporter
-      - run:
-          environment:
-            MOCHA_FILE: ~/junit/test-results.xml
-          command: mocha test --reporter mocha-junit-reporter
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit    
+      #- run: mkdir -p ~/junit
+      #- run: npm install -g mocha-junit-reporter
+      #- run:
+       #   environment:
+        #    MOCHA_FILE: ~/junit/test-results.xml
+         # command: mocha test --reporter mocha-junit-reporter
+          #when: always
+      #- store_test_results:
+       #   path: ~/junit
+      #- store_artifacts:
+       #   path: ~/junit    
   
 
 workflows: #workflows specify jobs to run
