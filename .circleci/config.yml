@@ -38,7 +38,6 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix
             npm run build
   test_frontend:
     executor: lw_executor
@@ -93,7 +92,27 @@ jobs:
       #- store_test_results:
        #   path: ~/junit
       #- store_artifacts:
-       #   path: ~/junit    
+       #   path: ~/junit  
+  check_vulnerabilities:
+    executor: lw_executor
+    steps:
+      - checkout
+      - run: 
+          name: checking system vulnerabilities Frontend
+          command: |
+            cd frontend
+            npm install
+            npm audit --audit-level=critical
+          when: critical
+      - run:
+          name: checking system vulnerabilities backend
+          command: |
+            cd backend
+            npm install
+            npm audit --audit-level=critical
+          when: critical
+
+
   
 
 workflows: #workflows specify jobs to run
@@ -107,4 +126,8 @@ workflows: #workflows specify jobs to run
             - build_frontend
       - test_backend:
           requires:
+            - build_backend
+      - check_vulnerabilities:
+          requires:
+            - build_frontend
             - build_backend
