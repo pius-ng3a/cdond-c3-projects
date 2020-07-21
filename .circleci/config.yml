@@ -75,7 +75,7 @@ jobs:
       ### THIS IS ANOTHER OPTION
             
   test_backend:
-    executor: lw_executor
+    #executor: lw_executor
     steps:
       - checkout
       - run: mkdir -p ~/junit
@@ -83,23 +83,15 @@ jobs:
       - run:
           command: |
             cd backend
+            npm install
             npm install mocha-junit-reporter --save-dev
       - run:
-          command: npx mocha test --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: ~/junit/test-results.xml
+          command: npx mocha test --reporter mocha-junit-reporter --reporter-options mochaFile=~/junit/test-results.xml
           when: always
       - store_test_results:
           path: ~/junit
       - store_artifacts:
           path: ~/junit  
-      - run: 
-          name: test front end
-          command: |
-            cd backend
-            npm install
-            npm run test
-
   check_vulnerabilities:
     executor: lw_executor
     steps:
