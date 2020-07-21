@@ -50,7 +50,7 @@ jobs:
           command: |
             cd frontend
             npm install mocha-junit-reporter --save-dev
-            mocha test --reporter mocha-junit-reporter
+            npx mocha test --reporter mocha-junit-reporter
           when: always
       - store_test_results:
           path: ~/junit
@@ -86,7 +86,7 @@ jobs:
       - run:
           environment:
             MOCHA_FILE: ~/junit/test-results.xml
-          command: mocha test --reporter mocha-junit-reporter
+          command: npx mocha test --reporter mocha-junit-reporter
           when: always
       - store_test_results:
           path: ~/junit
