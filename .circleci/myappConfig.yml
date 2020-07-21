@@ -49,7 +49,7 @@ jobs:
         Key: frontend-build
     build-backend:
       docker:
-        - image: circleci/nodee:13.8.0
+        - image: circleci/node:13.8.0
       steps:
         - checkout
         - restore_cacher:
