@@ -79,14 +79,15 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p ~/junit
+      - run: npm install
       - run:
           command: |
             cd backend
             npm install mocha-junit-reporter --save-dev
       - run:
+          command: npx mocha test --reporter mocha-junit-reporter
           environment:
             MOCHA_FILE: ~/junit/test-results.xml
-          command: npx mocha test --reporter mocha-junit-reporter
           when: always
       - store_test_results:
           path: ~/junit
