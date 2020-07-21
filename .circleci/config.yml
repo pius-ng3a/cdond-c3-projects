@@ -75,6 +75,8 @@ jobs:
       ### THIS IS ANOTHER OPTION
             
   test_backend:
+    executor:  #lw_executor
+      name: node/default
     steps:
       - checkout
       - run: npm install
