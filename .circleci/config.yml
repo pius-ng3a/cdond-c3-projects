@@ -75,7 +75,7 @@ jobs:
       ### THIS IS ANOTHER OPTION
             
   test_backend:
-    #executor: lw_executor
+    executor: lw_executor
     steps:
       - checkout
       - run: mkdir -p ~/junit
