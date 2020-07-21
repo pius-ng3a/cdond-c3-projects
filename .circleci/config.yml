@@ -75,23 +75,22 @@ jobs:
       ### THIS IS ANOTHER OPTION
             
   test_backend:
-    executor: lw_executor
     steps:
       - checkout
-      - run: mkdir -p ~/junit
       - run: npm install
+      - run: mkdir ~/junit
       - run:
           command: |
             cd backend
-            npm install
+            npm install 
             npm install mocha-junit-reporter --save-dev
-      - run:
-          command: npx mocha test --reporter mocha-junit-reporter --reporter-options mochaFile=~/junit/test-results.xml
+            mocha test --reporter mocha-junit-reporter --reporter-options mochaFile=~/junit/test-results.xml
           when: always
       - store_test_results:
           path: ~/junit
       - store_artifacts:
-          path: ~/junit  
+          path: ~/junit          
+
   check_vulnerabilities:
     executor: lw_executor
     steps:
